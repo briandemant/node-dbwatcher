@@ -1,4 +1,13 @@
 dbwatcher
 =========
 
-Watch a database for changes
+Watch a database for changes.
+
+
+
+### Todo:
+
+* detect auto_incement field
+* detect auto updated TIMESTAMP fields
+* add configuable fields
+* make it an event emitter
