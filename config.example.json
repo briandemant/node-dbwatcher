@@ -1,8 +1,19 @@
 {
-	"mysql": {
+	"mysql"  : {
 		"host"    : "127.0.0.1",
 		"user"    : "root",
 		"password": "",
 		"db"      : "test"
-	}
+	},
+	"default": "avg(id) as avg_id,avg(updated_at) as avg_ts,count(*) as count",
+	"custom" : [
+		{
+			"regexp": "fi.*",
+			"fields": "avg(id) as avg_id,avg(value) as avg_value,count(*) as count"
+		},
+		{
+			"regexp": ".*",
+			"fields": "'string' as something, avg(id) as avg_id,avg(value) as avg_value,count(*) as count"
+		}
+	]
 }

@@ -26,7 +26,14 @@ tblRes.on('result', function (res) {
 	res.on('row', function (row) {
 		var table = row[Object.keys(row)[0]];
 		console.log('Checking table: ' + table);
-		tables.push(new TableInfo(table));
+		var fields = cfg.default;
+		for (var i = 0; i < cfg.custom.length; i++) {
+			if (table.match(new RegExp("^" + cfg.custom[i].regexp + "$"))) {
+				fields = cfg.custom[i].fields;
+				break;
+			}
+		}
+		tables.push(new TableInfo(table, fields));
 	})
 	res.on('error', function (err) {
 		console.log('Result error: ' + inspect(err));
@@ -42,7 +49,8 @@ tblRes.on('end', function () {
 
 
 function checkTable(table, cb) {
-	var tblRes = conn.query('select avg(id) as avg_id,avg(updated_at) as avg_ts,count(*) as count from ' + table.name);
+
+	var tblRes = conn.query('select ' + table.fields + ' from ' + table.name);
 	tblRes.on('result', function (res) {
 		var result = null;
 		res.on('row', function (row) {
@@ -84,7 +92,8 @@ function checkTables(tables) {
 	});
 }
 
-function TableInfo(table) {
+function TableInfo(table, fields) {
 	this.name = table;
 	this.lastChecked = null;
+	this.fields = fields;
 }
